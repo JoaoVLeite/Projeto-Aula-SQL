@@ -1,0 +1,69 @@
+Faculdade 
+001- Faculdade Anchieta
+
+Polo
+
+011 - Cic
+022 - Neoville
+033 - Hauer
+
+Cursos
+
+001111 - Sistemas de Informação - Polo Cic
+002222 - Analise e Desenvolvimento de Sistemas - Polo Cic
+003333 - Gestão de Sistema de Informação - Polo Neoville
+004444 - Engenharia de Software - Polo Neoville
+005555 - Ciência de Dados - Polo Hauer
+006666 - Sistemas de Informação - polo Hauer 
+
+Disciplinas
+
+000001 - Logica de Programação ---------------------------- Cleycom
+000002 - UML----------------------------------------------- Mirielli
+000003 - Estrutura de Dados-------------------------------- Mirielli
+000004 - Linguagem de Programação C ----------------------- Cleycon
+000005 - Analise de Sistemas ------------------------------ Blum
+000006 - Fundamentos de Design ---------------------------- Mirielli
+000007 - Inglês Instrumental ------------------------------ Mirielli
+000008 - Sistemas Operacionais ---------------------------- Blum
+000009 - Redes de Computadores ---------------------------- Roberson
+000010 - Matematica Booleana ------------------------------ Cleycon
+000011 - Linguagem de Programação WEB --------------------- Marlos
+000012 - Linguagem de Programação JAVA -------------------- Marlos
+000013 - Linguagem de Programação JAVA Swing -------------- Marlos
+000014 - Linguagem de Programação Java WEB ---------------- Marlos
+000015 - Banco de Dados SQL ------------------------------- Blum
+000016 - Tecnologia de Programação Android ---------------- Marlos
+000017 - Métodos e Técnicas em Engenharia de Software ----- Roberson
+000018 - Metodologia da Pesquisa Científica --------------- Roberson
+000019 - Inovação e Design Thinking ----------------------- Mirielli
+000020 - Engenharia de Requisitos ------------------------- Marlos
+000021 - Tópicos em Segurança da Informação --------------- Roberson
+000022 - Ações educativas e Treinamento em TI ------------- Cleycon
+000023 - Análise e Projeto Arquitetural de Software ------- Mirielli
+000024 - Tópicos em Projeto de Infraestrutura ------------- Blum
+000025 - Tópicos em Construção de Software ---------------- Blum
+000026 - Tópicos em Sistemas de Apoio a Decisão ----------- Roberson
+000027 - Projeto Integrado -------------------------------- Cleycon
+000028 - Trabalho de Conclusão de Curso ------------------- Blum
+000029 - Organização e Arquitetura de Computadores -------- Mirielli
+000030 - Mecanica ----------------------------------------- Cleycon
+000031 - Linguagem de Programação Python ------------------ Marlos
+000032 - Sistemas de Bancos de Dados-Procedimentados ------ Blum
+000033 - Gerenciamento de Projetos ------------------------ Cleycon
+000034 - Manutenção de Software e Engenharia de Segurança - Roberson
+000035 - Segurança e Auditoria de Informação -------------- Roberson
+
+Professores
+
+111111111 - Edson Blum
+222222222 - Mirielli Santos
+333333333 - Roberson Souza
+444444444 - Marlos Rodrigues
+555555555 - Cleycom Mendes
+
+começar com o aluno 15
+INSERT INTO tbalunos_curso VALUES('001','001111','000001','555555555','0000000001','01','n','2022','02','7.1','6.1','9.1','8.1','7.6','0.0','7.6','Ap');
+
+
+update tbalunos_curso set situacao='Ap' where codfac='001' and codcurso ='001111' and coddisc='000010' and matricula='0000000019';

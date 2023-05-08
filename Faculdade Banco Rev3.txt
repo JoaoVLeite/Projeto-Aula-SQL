@@ -1,0 +1,428 @@
+CREATE DATABASE uniensino;
+
+USE uniensino;
+
+<<<<<Criação das tabelas>>>>>>
+
+CREATE TABLE tbfaculdades (codfac VARCHAR(3) NOT NULL, nome VARCHAR(50), polo VARCHAR(50), endereco VARCHAR(50), fone varchar(15),constraint PK_tbfaculdades primary key(codfac));
+
+CREATE TABLE tbpolos (codfac VARCHAR(3) NOT NULL, codpolo VARCHAR(3) NOT NULL, nome VARCHAR(50), endereco VARCHAR(50), email VARCHAR(30), CONSTRAINT PK_tbpolos PRIMARY KEY (codfac, codpolo));
+
+CREATE TABLE tbcursos (codfac VARCHAR(3) NOT NULL, codcurso VARCHAR(6) NOT NULL, nome VARCHAR(50), turno VARCHAR(1), qtd_horas VARCHAR(6), codpolo VARCHAR(3) NOT NULL, CONSTRAINT PK_tbcursos PRIMARY KEY (codfac,codcurso));
+
+CREATE TABLE tbdisciplinas (codfac VARCHAR(3) NOT NULL, codcurso VARCHAR(6) NOT NULL, coddisc VARCHAR(6) NOT NULL, nome VARCHAR(50), periodo VARCHAR(2), CONSTRAINT PK_tbdisciplinas PRIMARY KEY(codfac, codcurso, coddisc));
+
+CREATE TABLE tbprofessores (codfac VARCHAR(3) NOT NULL, matricula VARCHAR(9) NOT NULL, nome VARCHAR(50), conhecimento VARCHAR(150), dtcontrat DATE, dtnasc DATE, CONSTRAINT PK_tbprofessor PRIMARY KEY (codfac, matricula));
+
+CREATE TABLE tbalunos (codfac VARCHAR(3) NOT NULL, codcurso VARCHAR(6) NOT NULL, matricula VARCHAR(10) NOT NULL, nome VARCHAR(50), dtnasc DATE, sexo VARCHAR(1), est_civil VARCHAR(1), CONSTRAINT PK_tbalunos PRIMARY KEY (codfac, codcurso, matricula));
+
+CREATE TABLE tbalunos_curso (codfac VARCHAR(3) NOT NULL, codcurso VARCHAR(6) NOT NULL, coddisc VARCHAR(6) NOT NULL, matricula_prof VARCHAR(9) NOT NULL, matricula VARCHAR(10) NOT NULL, periodo VARCHAR(2) NOT NULL, turno VARCHAR(1), ano VARCHAR(4), semestre VARCHAR(2), nota1 DECIMAL(8,2), nota2 DECIMAL(8,2), nota3 DECIMAL(8,2), nota4 DECIMAL(8,2), media DECIMAL(8,2), pfinal DECIMAL(8,2), ntfinal DECIMAL(8,2), situacao VARCHAR(2), CONSTRAINT PK_tbalunos_curso PRIMARY KEY (codfac, codcurso, coddisc, matricula_prof, matricula, periodo));
+
+<<<<<Inserindo as chaves estrangeiras>>>>>
+
+ALTER TABLE tbpolos ADD CONSTRAINT FK_tbpolos_tbfaculdades FOREIGN KEY(codfac) REFERENCES tbfaculdades(codfac);
+
+ALTER TABLE tbcursos ADD CONSTRAINT FK_tbcursos_tbfaculdades FOREIGN KEY(codfac) REFERENCES tbfaculdades(codfac);
+
+ALTER TABLE tbcursos ADD CONSTRAINT FK_tbcursos_tbpolos FOREIGN KEY(codfac,codpolo) REFERENCES tbpolos(codfac,codpolo);
+
+ALTER TABLE tbdisciplinas ADD CONSTRAINT FK_tbdisciplinas_tbfaculdades FOREIGN KEY (codfac) REFERENCES tbfaculdades(codfac);
+
+ALTER TABLE tbdisciplinas ADD CONSTRAINT FK_tbdisciplinas_tbcursos FOREIGN KEY (codfac,codcurso) REFERENCES tbcursos(codfac,codcurso);
+
+ALTER TABLE tbprofessores ADD CONSTRAINT FK_tbprofessores_tbfaculdades FOREIGN KEY (codfac) REFERENCES tbfaculdades(codfac);
+
+ALTER TABLE tbalunos ADD CONSTRAINT FK_tbalunos_tbfaculdades FOREIGN KEY (codfac) REFERENCES tbfaculdades(codfac);
+
+ALTER TABLE tbalunos ADD CONSTRAINT FK_tbalunos_tbcursos FOREIGN KEY (codfac,codcurso) REFERENCES tbcursos(codfac,codcurso);
+
+ALTER TABLE tbalunos_curso ADD CONSTRAINT FK_tbalunos_cursos_tbfaculdades FOREIGN KEY(codfac) REFERENCES tbfaculdades(codfac);
+
+ALTER TABLE tbalunos_curso ADD CONSTRAINT FK_tbalunos_cursos_tbcursos FOREIGN KEY (codfac,codcurso) REFERENCES tbcursos (codfac,codcurso);
+
+ALTER TABLE tbalunos_curso ADD CONSTRAINT FK_tbalunso_cursos_tbdisciplinas FOREIGN KEY (codfac,codcurso,coddisc) REFERENCES tbdisciplinas(codfac, codcurso, coddisc);
+
+ALTER TABLE tbalunos_curso ADD CONSTRAINT FK_tbalunos_curso_tbprofessores FOREIGN KEY (codfac,matricula_prof) REFERENCES tbprofessores (codfac,matricula);
+
+ALTER TABLE tbalunos_curso ADD CONSTRAINT FK_tbalunos_curso_tbalunos FOREIGN KEY (codfac, codcurso, matricula) REFERENCES tbalunos (codfac,codcurso,matricula);
+
+<<<<<<insert>>>>>>>>> 1 Faculdade - 3 Polos - 5 Cursos(sendo 2 por polo)- 15Disciplinas por Curso(5 por período sendo 3 períodos) - 5 Professores - 12 Alunos
+
+<<<<<<<<<Tabela Faculdade>>>>>>>>>>>>>
+
+INSERT INTO tbfaculdades VALUES ('001','Faculdade Anchieta','Campus','Rua XV de Novembro - nº551','(41)3328-4489');
+
+<<<<<<<<<<<<<Tabela Polo>>>>>>>>>>
+
+INSERT INTO tbpolos VALUES ('001','011','Cidade Industrial - CIC','Rua Pedro Gusso - n°4150','faculdadeanchietacic@gamil.com');
+INSERT INTO tbpolos VALUES ('001','022','Neoville','Rua Senador Accioly Filho - n°1021','fac.anchietaneoville@gmail.com');
+INSERT INTO tbpolos VALUES ('001','033','Hauer','Rua Ten. Tito Teixeira de Castro - n°1222','fac.anchietahauer@gmail.com');
+
+<<<<<<<<<<Tabela Cursos>>>>>>>>
+
+INSERT INTO tbcursos VALUES ('001','001111','Sistema de Informação','N','105:00','011');
+INSERT INTO tbcursos VALUES ('001','002222','Analise e Desenvolvimento de Sistema','N','70:00','011');
+INSERT INTO tbcursos VALUES ('001','003333','Gestão de  Sistema de Informação','T','70:00','022');
+INSERT INTO tbcursos VALUES ('001','004444','Engenharia de  Software','T','80:00','022');
+INSERT INTO tbcursos VALUES ('001','005555','Ciência de Dados','M','80:00','033');
+INSERT INTO tbcursos VALUES ('001','006666','Sistema de Informação','M','105:00','033');
+
+<<<<<<<<<Tabela Disciplinas>>>>>>
+
+<<<<<Curso de Sistemas>>>>>
+
+INSERT INTO tbdisciplinas VALUES ('001','001111','000001','Logica de Programação','01');
+INSERT INTO tbdisciplinas VALUES ('001','001111','000002','UML','01');
+INSERT INTO tbdisciplinas VALUES ('001','001111','000003','Estrutura de Dados','01');
+INSERT INTO tbdisciplinas VALUES ('001','001111','000004','Linguagem de Programação C','01');
+INSERT INTO tbdisciplinas VALUES ('001','001111','000005','Analise de Sistemas','01');
+INSERT INTO tbdisciplinas VALUES ('001','001111','000006','Fundamentos de Design','02');
+INSERT INTO tbdisciplinas VALUES ('001','001111','000007','Inglês Instrumental','02');
+INSERT INTO tbdisciplinas VALUES ('001','001111','000008','Sistemas Operacionais','02');
+INSERT INTO tbdisciplinas VALUES ('001','001111','000009','Redes de Computadores','02');
+INSERT INTO tbdisciplinas VALUES ('001','001111','000010','Matematica Booleana','02');
+INSERT INTO tbdisciplinas VALUES ('001','001111','000011','Linguagem de Programação WEB','03');
+INSERT INTO tbdisciplinas VALUES ('001','001111','000012','Linguagem de Programação JAVA','03');
+INSERT INTO tbdisciplinas VALUES ('001','001111','000013','Linguagem de Programação JAVA Swing','03');
+INSERT INTO tbdisciplinas VALUES ('001','001111','000014','Linguagem de Programação JAVA WEB MOVEL','03');
+INSERT INTO tbdisciplinas VALUES ('001','001111','000015','Banco de Dados SQL','03');
+
+<<<<<< Curso de  Analise e Desenvolvimento de Sistemas>>>>>>
+
+INSERT INTO tbdisciplinas VALUES ('001','002222','000001','Logica de Programação','01');
+INSERT INTO tbdisciplinas VALUES ('001','002222','000002','UML','01');
+INSERT INTO tbdisciplinas VALUES ('001','002222','000003','Estrutura de Dados','01');
+INSERT INTO tbdisciplinas VALUES ('001','002222','000004','Linguagem de Programação C','01');
+INSERT INTO tbdisciplinas VALUES ('001','002222','000005','Analise de Sistemas','01');
+INSERT INTO tbdisciplinas VALUES ('001','002222','000006','Fundamentos de Design','02');
+INSERT INTO tbdisciplinas VALUES ('001','002222','000007','Inglês Instrumental','02');
+INSERT INTO tbdisciplinas VALUES ('001','002222','000008','Sistemas Operacionais','02');
+INSERT INTO tbdisciplinas VALUES ('001','002222','000009','Redes de Computadores','02');
+INSERT INTO tbdisciplinas VALUES ('001','002222','000010','Matematica Booleana','02');
+INSERT INTO tbdisciplinas VALUES ('001','002222','000011','Linguagem de Programação WEB','03');
+INSERT INTO tbdisciplinas VALUES ('001','002222','000012','Linguagem de Programação JAVA','03');
+INSERT INTO tbdisciplinas VALUES ('001','002222','000013','Linguagem de Programação JAVA Swing','03');
+INSERT INTO tbdisciplinas VALUES ('001','002222','000016','Tecnologia de Programação Android','03');
+INSERT INTO tbdisciplinas VALUES ('001','002222','000015','Banco de Dados SQL','03');
+
+<<<<<< Curso de  Gestão de  Sistema de Informação>>>>>>
+
+INSERT INTO tbdisciplinas VALUES ('001','003333','000017','Métodos e Técnicas em Engenharia de Software','01');
+INSERT INTO tbdisciplinas VALUES ('001','003333','000018','Metodologia da Pesquisa Científica','01');
+INSERT INTO tbdisciplinas VALUES ('001','003333','000019','Inovação e Design Thinking','01');
+INSERT INTO tbdisciplinas VALUES ('001','003333','000020','Engenharia de Requisitos','01');
+INSERT INTO tbdisciplinas VALUES ('001','003333','000021','Tópicos em Segurança da Informação','01');
+INSERT INTO tbdisciplinas VALUES ('001','003333','000022','Ações educativas e Treinamento em TI','02');
+INSERT INTO tbdisciplinas VALUES ('001','003333','000023','Análise e Projeto Arquitetural de Software','02');
+INSERT INTO tbdisciplinas VALUES ('001','003333','000024','Tópicos em Projeto de Infraestrutura','02');
+INSERT INTO tbdisciplinas VALUES ('001','003333','000025','Tópicos em Construção de Software','02');
+INSERT INTO tbdisciplinas VALUES ('001','003333','000026','Tópicos em Sistemas de Apoio a Decisão','02');
+INSERT INTO tbdisciplinas VALUES ('001','003333','000027','Projeto Integrado','03');
+INSERT INTO tbdisciplinas VALUES ('001','003333','000012','Linguagem de Programação JAVA','03');
+INSERT INTO tbdisciplinas VALUES ('001','003333','000013','Linguagem de Programação JAVA Swing','03');
+INSERT INTO tbdisciplinas VALUES ('001','003333','000028','Trabalho de Conclusão de Curso','03');
+INSERT INTO tbdisciplinas VALUES ('001','003333','000015','Banco de Dados SQL','03');
+
+<<<<<< Curso de Engenharia de  Software>>>>>>
+
+INSERT INTO tbdisciplinas VALUES ('001','004444','000001','Logica de Programação','01');
+INSERT INTO tbdisciplinas VALUES ('001','004444','000004','Linguagem de Programação C','01');
+INSERT INTO tbdisciplinas VALUES ('001','004444','000005','Analise de Sistemas','01');
+INSERT INTO tbdisciplinas VALUES ('001','004444','000029','Organização e Arquitetura de Computadores','01');
+INSERT INTO tbdisciplinas VALUES ('001','004444','000030','Mecanica','01');
+INSERT INTO tbdisciplinas VALUES ('001','004444','000010','Matematica Booleana','02');
+INSERT INTO tbdisciplinas VALUES ('001','004444','000012','Linguagem de Programação JAVA','02');
+INSERT INTO tbdisciplinas VALUES ('001','004444','000015','Banco de Dados SQL','02');
+INSERT INTO tbdisciplinas VALUES ('001','004444','000014','Linguagem de Programação Java WEB','02');
+INSERT INTO tbdisciplinas VALUES ('001','004444','000020','Engenharia de Requisitos','02');
+INSERT INTO tbdisciplinas VALUES ('001','004444','000031','Linguagem de Programação Python','03');
+INSERT INTO tbdisciplinas VALUES ('001','004444','000032','Sistemas de Bancos de Dados-Procedimentados','03');
+INSERT INTO tbdisciplinas VALUES ('001','004444','000006','Fundamentos de Design','03');
+INSERT INTO tbdisciplinas VALUES ('001','004444','000034','Manutenção de Software e Engenharia de Segurança','03');
+INSERT INTO tbdisciplinas VALUES ('001','004444','000035','Segurança e Auditoria de Informação','03');
+
+<<<<<< Curso de Ciência de Dados>>>>>>
+
+INSERT INTO tbdisciplinas VALUES ('001','005555','000001','Logica de Programação','01');
+INSERT INTO tbdisciplinas VALUES ('001','005555','000003','Estrutura de Dados','01');
+INSERT INTO tbdisciplinas VALUES ('001','005555','000005','Analise de Sistemas','01');
+INSERT INTO tbdisciplinas VALUES ('001','005555','000008','Sistemas Operacionais','01');
+INSERT INTO tbdisciplinas VALUES ('001','005555','000033','Gerenciamento de Projetos','01');
+INSERT INTO tbdisciplinas VALUES ('001','005555','000029','Organização e Arquitetura de Computadores','02');
+INSERT INTO tbdisciplinas VALUES ('001','005555','000031','Linguagem de Programação Python','02');
+INSERT INTO tbdisciplinas VALUES ('001','005555','000007','Inglês Instrumental','02');
+INSERT INTO tbdisciplinas VALUES ('001','005555','000006','Fundamentos de Design','02');
+INSERT INTO tbdisciplinas VALUES ('001','005555','000015','Banco de Dados SQL','02');
+INSERT INTO tbdisciplinas VALUES ('001','005555','000023','Análise e Projeto Arquitetural de Software','03');
+INSERT INTO tbdisciplinas VALUES ('001','005555','000032','Sistemas de Bancos de Dados-Procedimentados','03');
+INSERT INTO tbdisciplinas VALUES ('001','005555','000021','Tópicos em Segurança da Informação','03');
+INSERT INTO tbdisciplinas VALUES ('001','005555','000035','Segurança e Auditoria de Informação','03');
+INSERT INTO tbdisciplinas VALUES ('001','005555','000027','Projeto Integrado','03');
+
+<<<<<Curso de Sistemas>>>>>
+
+INSERT INTO tbdisciplinas VALUES ('001','006666','000001','Logica de Programação','01');
+INSERT INTO tbdisciplinas VALUES ('001','006666','000002','UML','01');
+INSERT INTO tbdisciplinas VALUES ('001','006666','000003','Estrutura de Dados','01');
+INSERT INTO tbdisciplinas VALUES ('001','006666','000004','Linguagem de Programação C','01');
+INSERT INTO tbdisciplinas VALUES ('001','006666','000005','Analise de Sistemas','01');
+INSERT INTO tbdisciplinas VALUES ('001','006666','000006','Fundamentos de Design','02');
+INSERT INTO tbdisciplinas VALUES ('001','006666','000007','Inglês Instrumental','02');
+INSERT INTO tbdisciplinas VALUES ('001','006666','000008','Sistemas Operacionais','02');
+INSERT INTO tbdisciplinas VALUES ('001','006666','000009','Redes de Computadores','02');
+INSERT INTO tbdisciplinas VALUES ('001','006666','000010','Matematica Booleana','02');
+INSERT INTO tbdisciplinas VALUES ('001','006666','000011','Linguagem de Programação WEB','03');
+INSERT INTO tbdisciplinas VALUES ('001','006666','000012','Linguagem de Programação JAVA','03');
+INSERT INTO tbdisciplinas VALUES ('001','006666','000013','Linguagem de Programação JAVA Swing','03');
+INSERT INTO tbdisciplinas VALUES ('001','006666','000014','Linguagem de Programação JAVA WEB MOVEL','03');
+INSERT INTO tbdisciplinas VALUES ('001','006666','000015','Banco de Dados SQL','03');
+
+<<<<<<<tabela de professores>>>>>>>>
+
+INSERT INTO tbprofessores VALUES('001','111111111','Edson Blum','SQL, Redes, Sistemas Operacionais','2010-05-20','1965-04-11');
+INSERT INTO tbprofessores VALUES('001','222222222','Mirielli Santos','Ingles, Desing','2011-04-15','1970-08-23');
+INSERT INTO tbprofessores VALUES('001','333333333','Roberson Souza','SQL, Redes, Estruturas, Segurança','2010-10-10','1968-03-21');
+INSERT INTO tbprofessores VALUES('001','444444444','Marlos Rodrigues','SQL, Java, Java Web, Python','2013-02-17','1969-10-03');
+INSERT INTO tbprofessores VALUES('001','555555555','Cleycom Mendes','SQL, Java, Java Web, Python','2013-02-17','1969-10-03');
+
+<<<<<<<tabela de alunos>>>>>>>>
+
+INSERT INTO tbalunos VALUES('001','001111','0000000001','Joao Lucas','1997-01-23','m','s');
+INSERT INTO tbalunos VALUES('001','001111','0000000002','Ana Paulo','1997-10-03','f','s');
+INSERT INTO tbalunos VALUES('001','001111','0000000003','Robert Leal','2000-04-15','m','s');
+INSERT INTO tbalunos VALUES('001','001111','0000000004','Daniel Mateus','2002-11-17','m','s');
+INSERT INTO tbalunos VALUES('001','001111','0000000005','Daiane Maria','1994-02-02','f','c');
+INSERT INTO tbalunos VALUES('001','001111','0000000006','José Pedro','1998-06-28','m','s');
+INSERT INTO tbalunos VALUES('001','001111','0000000007','Bruno Pereira','1996-03-16','m','c');
+INSERT INTO tbalunos VALUES('001','001111','0000000008','Ruan Francisco','1999-06-03','m','s');
+INSERT INTO tbalunos VALUES('001','001111','0000000009','Robson Carlos','2001-06-19','m','s');
+INSERT INTO tbalunos VALUES('001','001111','0000000010','Lucas Mendes','1999-01-13','m','s');
+INSERT INTO tbalunos VALUES('001','001111','0000000011','Roberta Souza','2002-05-07','f','s');
+INSERT INTO tbalunos VALUES('001','001111','0000000012','Mauricio Levi','2001-05-20','m','s');
+INSERT INTO tbalunos VALUES('001','001111','0000000013','Joao Pedro','2000-04-07','m','s');
+INSERT INTO tbalunos VALUES('001','001111','0000000014','Matheus Silva','1996-12-14','m','c');
+INSERT INTO tbalunos VALUES('001','001111','0000000015','Julia Carolina','1999-07-30','f','s');
+INSERT INTO tbalunos VALUES('001','001111','0000000016','Pedro Martins','2003-06-13','m','s');
+INSERT INTO tbalunos VALUES('001','001111','0000000017','Jose Carlos','1994-08-04','m','c');
+INSERT INTO tbalunos VALUES('001','001111','0000000018','Henrique Souza','1995-06-19','m','s');
+INSERT INTO tbalunos VALUES('001','001111','0000000019','Sabrina Castro','1998-09-01','f','s');
+INSERT INTO tbalunos VALUES('001','001111','0000000020','Bruna Aparecida','1993-05-10','f','c');
+INSERT INTO tbalunos VALUES('001','001111','0000000021','Casemiro Andre','1980-06-27','m','c');
+INSERT INTO tbalunos VALUES('001','001111','0000000022','Enzo Rodrigues','2000-12-23','m','s');
+INSERT INTO tbalunos VALUES('001','001111','0000000023','Fernado Silva','2000-01-31','m','s');
+INSERT INTO tbalunos VALUES('001','001111','0000000024','Breno Carlos','1999-11-04','m','s');
+INSERT INTO tbalunos VALUES('001','001111','0000000025','Joao Vitor','2000-09-26','m','s');
+INSERT INTO tbalunos VALUES('001','001111','0000000026','Jessica Cristina','1999-03-17','f','s');
+INSERT INTO tbalunos VALUES('001','001111','0000000027','Bruno Rodrigo','1999-07-08','m','s');
+INSERT INTO tbalunos VALUES('001','001111','0000000028','Marco Carlos','1998-04-07','m','s');
+INSERT INTO tbalunos VALUES('001','001111','0000000029','Matheus Freitas','1997-05-29','m','c');
+INSERT INTO tbalunos VALUES('001','001111','0000000030','Nain Souza','1990-06-06','m','c');
+INSERT INTO tbalunos VALUES('001','002222','0000000031','Samuel Freitas','1998-08-20','m','s');
+INSERT INTO tbalunos VALUES('001','002222','0000000032','Calors Matheus','1997-05-24','m','s');
+INSERT INTO tbalunos VALUES('001','002222','0000000033','Camila Leite','1998-06-16','f','c');
+INSERT INTO tbalunos VALUES('001','002222','0000000034','Valmir Soares','1996-08-02','m','s');
+INSERT INTO tbalunos VALUES('001','002222','0000000035','Mariana Palliano','1996-11-20','f','s');
+INSERT INTO tbalunos VALUES('001','002222','0000000036','Joao Leite','1997-09-26','m','s');
+INSERT INTO tbalunos VALUES('001','002222','0000000037','Camilo Tiago','2001-10-10','m','s');
+INSERT INTO tbalunos VALUES('001','002222','0000000038','Gervasio Marques','1990-06-11','m','c');
+INSERT INTO tbalunos VALUES('001','002222','0000000039','Geraldo Yoshi','1988-03-01','m','c');
+INSERT INTO tbalunos VALUES('001','002222','0000000040','Yoshiu Yakuza','1999-07-06','m','s');
+INSERT INTO tbalunos VALUES('001','002222','0000000041','Alan Jhony','2000-09-07','m','s');
+INSERT INTO tbalunos VALUES('001','002222','0000000042','Jose Jhony','2001-07-17','m','s');
+INSERT INTO tbalunos VALUES('001','002222','0000000043','Pedro Antonio','1999-09-07','m','s');
+INSERT INTO tbalunos VALUES('001','002222','0000000044','Matheus Lucio','2002-04-27','m','s');
+INSERT INTO tbalunos VALUES('001','002222','0000000045','Alan Jhony','2000-09-07','m','s');
+INSERT INTO tbalunos VALUES('001','002222','0000000046','Eduarda Fioret','2002-05-07','f','s');
+INSERT INTO tbalunos VALUES('001','002222','0000000047','Jese Santos','1998-08-10','m','s');
+INSERT INTO tbalunos VALUES('001','002222','0000000048','Bruna Reis','2001-05-23','f','s');
+INSERT INTO tbalunos VALUES('001','002222','0000000049','Alana Barbosa','2000-09-07','f','s');
+INSERT INTO tbalunos VALUES('001','002222','0000000050','Carolina Oleski','1996-10-25','f','c');
+INSERT INTO tbalunos VALUES('001','002222','0000000051','Carlos Porto','1999-06-05','m','s');
+INSERT INTO tbalunos VALUES('001','002222','0000000052','Ricardo Soares','1999-01-05','m','s');
+INSERT INTO tbalunos VALUES('001','002222','0000000053','Jack Chan','1989-04-15','m','c');
+INSERT INTO tbalunos VALUES('001','002222','0000000054','Joao Silva','1995-08-22','m','c');
+INSERT INTO tbalunos VALUES('001','002222','0000000055','Pedro Augusto','1999-03-26','m','s');
+INSERT INTO tbalunos VALUES('001','002222','0000000056','Mateus Henrique','2000-04-25','m','s');
+INSERT INTO tbalunos VALUES('001','002222','0000000057','Maria Clara','1998-05-13','f','s');
+INSERT INTO tbalunos VALUES('001','002222','0000000058','Gabriela Ribeiro','2001-02-19','f','s');
+INSERT INTO tbalunos VALUES('001','002222','0000000059','Gessica Cristina','1997-07-21','f','c');
+INSERT INTO tbalunos VALUES('001','002222','0000000060','Ronaldo Junior','1995-10-14','m','s');
+INSERT INTO tbalunos VALUES('001','003333','0000000061','Romaldo Chaves','1994-05-01','m','c');
+INSERT INTO tbalunos VALUES('001','003333','0000000062','João Filho','1999-07-18','m','s');
+INSERT INTO tbalunos VALUES('001','003333','0000000063','Tarcisio Farias','1999-12-08','m','s');
+INSERT INTO tbalunos VALUES('001','003333','0000000064','Carla Pedroso','2000-12-24','f','s');
+INSERT INTO tbalunos VALUES('001','003333','0000000065','Alan Peres','1992-05-23','m','c');
+INSERT INTO tbalunos VALUES('001','003333','0000000066','Yan Rodrigo','1996-11-27','m','s');
+INSERT INTO tbalunos VALUES('001','003333','0000000067','Camila Souza','1999-03-26','f','s');
+INSERT INTO tbalunos VALUES('001','003333','0000000068','Rodolfo Camilo','1980-12-07','m','c');
+INSERT INTO tbalunos VALUES('001','003333','0000000069','Erasmo Filho','1998-03-22','m','s');
+INSERT INTO tbalunos VALUES('001','003333','0000000070','Fabio Santos','1997-06-29','m','s');
+INSERT INTO tbalunos VALUES('001','003333','0000000071','Matheus Santos','1995-04-08','m','s');
+INSERT INTO tbalunos VALUES('001','003333','0000000072','Marlos Pereira','1999-01-08','m','s');
+INSERT INTO tbalunos VALUES('001','003333','0000000073','Karol Santos','1996-02-24','f','s');
+INSERT INTO tbalunos VALUES('001','003333','0000000074','Nicole Lima','1996-01-09','f','s');
+INSERT INTO tbalunos VALUES('001','003333','0000000075','Amarildo Paliano','1988-03-28','m','c');
+INSERT INTO tbalunos VALUES('001','003333','0000000076','Kauann Henrique','1995-06-16','m','s');
+INSERT INTO tbalunos VALUES('001','003333','0000000077','Andre Leite','1990-03-04','m','c');
+INSERT INTO tbalunos VALUES('001','003333','0000000078','Ademir Freitas','1999-01-25','m','s');
+INSERT INTO tbalunos VALUES('001','003333','0000000079','José Aparecido','1996-03-04','m','s');
+INSERT INTO tbalunos VALUES('001','003333','0000000080','Pedro Sampaio','1994-05-29','m','s');
+INSERT INTO tbalunos VALUES('001','003333','0000000081','Fabiano Castro','1998-09-01','m','s');
+INSERT INTO tbalunos VALUES('001','003333','0000000082','Evandro Carvalho','2001-04-01','m','s');
+INSERT INTO tbalunos VALUES('001','003333','0000000083','Samira Honoka','2002-03-13','f','s');
+INSERT INTO tbalunos VALUES('001','003333','0000000084','Vinicius Jose','1994-02-28','m','s');
+INSERT INTO tbalunos VALUES('001','003333','0000000085','Debora Cristina','1989-06-15','f','c');
+INSERT INTO tbalunos VALUES('001','003333','0000000086','Adan Farias','2000-08-27','m','s');
+INSERT INTO tbalunos VALUES('001','003333','0000000087','Franciele Paes','1999-05-03','f','s');
+INSERT INTO tbalunos VALUES('001','003333','0000000088','Amanda Nunes','1996-06-19','f','s');
+INSERT INTO tbalunos VALUES('001','003333','0000000089','Lorna Francisca','1998-02-07','f','s');
+INSERT INTO tbalunos VALUES('001','003333','0000000090','Vinicius Yakamura','2000-04-19','m','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000091','Vitoria Maria','1999-12-17','f','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000092','Camila Pitanga','1990-10-09','f','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000093','Vitor Andrade','2001-07-06','m','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000094','Alisson Luka','1996-07-27','m','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000095','Marcos Miranda','1998-07-19','m','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000096','Marlon Rodney','1995-03-23','m','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000097','Pedro Soarez','2000-04-11','m','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000098','Victoria Martins','1998-01-17','f','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000099','Maria Tereza','1999-01-17','f','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000100','Vitor Monarque','1996-04-15','m','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000101','Joao Paulo','1999-09-27','m','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000102','Matheus Fabiano','1990-07-13','m','c');
+INSERT INTO tbalunos VALUES('001','004444','0000000103','Marcio Batista','1999-03-10','m','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000104','Marcia Roberta','1994-08-10','f','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000105','Rebecca Delaroza','1999-03-07','f','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000106','Patricia Pilar','1997-09-23','f','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000107','Eduardo Fagundes','1997-07-27','m','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000108','Michael Harlow','2000-07-27','m','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000109','Lisa Halsey','2002-06-05','f','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000110','Luana Leite','2000-07-19','f','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000111','Luiza Leite','2002-03-27','f','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000112','Luan Silva','1997-02-06','m','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000113','Gustavo Muniz','1999-12-07','m','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000114','Carlos Santos','2000-03-01','m','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000115','Pedro Osniak','2002-05-04','m','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000116','Mariano Floriano','1990-03-29','m','c');
+INSERT INTO tbalunos VALUES('001','004444','0000000117','Lucas Salvador','2001-04-20','m','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000118','Daniela Azelea','2001-03-07','f','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000119','Leticia Pereira','1997-09-14','f','s');
+INSERT INTO tbalunos VALUES('001','004444','0000000120','Tamara Salvador','2000-04-24','f','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000121','João Domingos','1996-04-09','m','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000122','Jose Tavarez','1998-12-09','m','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000123','Pedro Samuel','1999-02-03','m','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000124','Samuel Pericles','1996-01-10','m','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000125','Daniela Karolina','1998-01-28','f','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000126','Wallace Alecksandr','1996-07-21','m','c');
+INSERT INTO tbalunos VALUES('001','005555','0000000127','Isabele Mendes','2000-05-17','f','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000128','Igor Batista','1996-07-29','m','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000129','Matheus Bruno','1999-09-09','m','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000130','Rodrigo Domingos','1994-05-29','m','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000131','Rafaela Martins','1997-05-19','f','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000132','Rodrigo Miranda','1995-07-07','m','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000133','Vinicius Camilo','1999-06-25','m','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000134','Kelvin Mateus','1998-08-23','m','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000135','Joao Eduardo','1999-03-14','m','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000136','Mirella Ramos','1997-04-13','f','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000137','Brenda Camila','1999-03-01','f','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000138','Bruno Galhiasso','2001-02-25','m','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000139','Carlos Fabricio','1996-12-04','m','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000140','Adalberto Paes','1993-10-12','m','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000141','Nilza Martins','1992-01-25','f','c');
+INSERT INTO tbalunos VALUES('001','005555','0000000142','Thalita Vargas','1995-06-17','f','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000143','Tales Peixoto','1996-09-13','m','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000144','Nivaldo Junior','1997-03-17','m','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000145','Francielle Camargo','1999-10-15','f','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000146','Julia Maria','2002-09-05','f','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000147','Tais Maria','1999-03-10','f','c');
+INSERT INTO tbalunos VALUES('001','005555','0000000148','Ricardo Camargo','1997-10-07','m','s');
+INSERT INTO tbalunos VALUES('001','005555','0000000149','Agnaldo Rodolfo','1992-07-27','m','c');
+INSERT INTO tbalunos VALUES('001','005555','0000000150','Joao Francisco','1994-03-01','m','c');
+INSERT INTO tbalunos VALUES('001','006666','0000000151','Ademir Lourenço','1992-05-17','m','c');
+INSERT INTO tbalunos VALUES('001','006666','0000000152','Renato Bartholomeu','1998-07-07','m','s');
+INSERT INTO tbalunos VALUES('001','006666','0000000153','Matheus Afonso','1999-12-07','m','s');
+INSERT INTO tbalunos VALUES('001','006666','0000000154','Joao Rodrigo','1997-09-09','m','s');
+INSERT INTO tbalunos VALUES('001','006666','0000000155','Ketelyn Marcela','1997-07-10','f','s');
+INSERT INTO tbalunos VALUES('001','006666','0000000156','Cleiton Machado','1996-04-17','m','s');
+INSERT INTO tbalunos VALUES('001','006666','0000000157','Bernardo Cristo','1999-02-09','m','s');
+INSERT INTO tbalunos VALUES('001','006666','0000000158','Margaret Amaral','1990-01-17','f','c');
+INSERT INTO tbalunos VALUES('001','006666','0000000159','Cristopher Phelipe','2000-02-07','m','s');
+INSERT INTO tbalunos VALUES('001','006666','0000000160','Valdecir Martins','1986-08-11','m','c');
+INSERT INTO tbalunos VALUES('001','006666','0000000161','Jose Astolfo','1997-08-03','m','s');
+INSERT INTO tbalunos VALUES('001','006666','0000000162','Jorge Bento','1998-07-02','m','s');
+INSERT INTO tbalunos VALUES('001','006666','0000000163','Felipe Alves','1996-06-27','m','s');
+INSERT INTO tbalunos VALUES('001','006666','0000000164','Jacinto Pinto','1999-07-06','m','s');
+INSERT INTO tbalunos VALUES('001','006666','0000000165','Anita Maria','2000-09-07','f','s');
+INSERT INTO tbalunos VALUES('001','006666','0000000166','Leandro Hasun','1994-07-09','m','s');
+INSERT INTO tbalunos VALUES('001','006666','0000000167','Anamara Faria','1998-04-09','f','s');
+INSERT INTO tbalunos VALUES('001','006666','0000000168','Valeria Lemes','1986-12-17','f','c');
+INSERT INTO tbalunos VALUES('001','006666','0000000169','Fabio Cunha','1990-07-09','m','c');
+INSERT INTO tbalunos VALUES('001','006666','0000000170','Giovanna Lancelot','1999-04-10','m','s');
+INSERT INTO tbalunos VALUES('001','006666','0000000171','Gabriel Medina','1996-03-08','m','s');
+INSERT INTO tbalunos VALUES('001','006666','0000000172','Thiago Neves','1995-09-25','m','c');
+INSERT INTO tbalunos VALUES('001','006666','0000000173','Leonardo Leite','1999-08-13','m','s');
+INSERT INTO tbalunos VALUES('001','006666','0000000174','Paula Olivia','1994-04-10','f','s');
+INSERT INTO tbalunos VALUES('001','006666','0000000175','Patricia Araujo','1997-01-16','f','s');
+INSERT INTO tbalunos VALUES('001','006666','0000000176','Iago Santiago','1999-10-01','m','s');
+INSERT INTO tbalunos VALUES('001','006666','0000000177','Wilson Medeiros','1996-03-11','m','s');
+INSERT INTO tbalunos VALUES('001','006666','0000000178','Cristian Souza','1996-07-11','m','s');
+INSERT INTO tbalunos VALUES('001','006666','0000000179','Ana Clara','1998-02-14','f','s');
+INSERT INTO tbalunos VALUES('001','006666','0000000180','Isabel Cristina','1997-03-23','f','s');
+
+
+
+
+Resolução das perguntas
+
+1)
+
+select matricula, nome from tbprofessores ORDER BY matricula;
+
+2)
+
+select FA.codfac, FA.nome, PO.codpolo, PO.nome, PO.endereco, PO.email FROM tbfaculdades FA, tbpolos PO where FA.codfac = PO.codfac;
+
+3)
+
+select AL.matricula, AL.nome, AL.dtnasc, AL.sexo, AL.est_civil, CR.nome FROM tbalunos AL, tbcursos CR WHERE AL.codcurso = CR.codcurso ORDER BY AL.nome;
+
+4)
+
+select PF.matricula, PF.nome, PF.conhecimento, PF.dtcontrat, PF.dtnasc, DI.nome FROM tbprofessores PF, tbdisciplinas DI, tbalunos_curso AC where PF.matricula = AC.matricula_prof AND AC.coddisc = DI.coddisc GROUP BY AC.coddisc ORDER BY PF.nome;
+
+5)
+
+select FA.nome, CR.nome FROM tbfaculdades FA, tbcursos CR WHERE CR.codfac = FA.codfac;
+
+6)
+
+select AL.nome, CA.nota1, CA.nota2, CA.nota3, CA.nota4, CA.media, CA.pfinal, CA.ntfinal FROM tbalunos AL, tbalunos_curso CA WHERE CA.matricula = AL.matricula ORDER BY AL.nome;
+
+7)
+
+select AL.nome, AL.dtnasc FROM tbalunos AL WHERE AL.dtnasc LIKE '%12%';
+
+8)
+
+select AL.nome, CA.nota1, CA.nota2, CA.nota3, CA.nota4, CA.media, CA.pfinal, CA.ntfinal FROM tbalunos AL, tbalunos_curso CA WHERE CA.matricula = AL.matricula AND CA.semestre ='02' AND CA.ano='2022' ORDER BY AL.nome;
+
+9)
+
+select PF.nome FROM tbprofessores PF WHERE PF.nome LIKE 'M%';
+
+10)
+
+ select AL.matricula, AL.nome, AL.dtnasc, AL.sexo, AL.est_civil, CR.nome, CA.situacao FROM tbalunos AL, tbcursos CR, tbalunos_curso CA WHERE AL.codcurso = CR.codcurso AND CA.matricula = AL.matricula AND CA.semestre ='02' AND CA.ano='2022' GROUP BY AL.nome;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
